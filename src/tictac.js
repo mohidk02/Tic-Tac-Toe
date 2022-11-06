@@ -14,7 +14,12 @@ const Cell = ({ ID, counterC, onCalculateCounter, onMark }) => {
   };
   return (
     <>
-      <div id={ID} style={{ width: "100%" }} onClick={mark}>
+      <div
+        id={ID}
+        style={{ width: "100%" }}
+        className={value === "X" ? "X" : value === "O" ? "O" : ""}
+        onClick={mark}
+      >
         {value}
       </div>
     </>
@@ -22,7 +27,7 @@ const Cell = ({ ID, counterC, onCalculateCounter, onMark }) => {
 };
 
 const Player = ({ player }) => {
-  return <>Current Player: {player}</>;
+  return <>Current Player: {player === 1 ? "X" : "O"}</>;
 };
 
 const Tictac = () => {
@@ -46,7 +51,7 @@ const Tictac = () => {
 
   //Restart Match
   const replay = () => {
-    console.log("replay");
+    window.location.reload();
   };
 
   //set Winner
@@ -54,8 +59,10 @@ const Tictac = () => {
   if (winner) {
     return (
       <>
-        <h1>Player {winner} has won the game</h1>
-        <button onClick={replay}>Replay</button>
+        <div className="result">
+          <h1>Player {winner} has won the game</h1>
+          <button onClick={replay}>Play Again</button>
+        </div>
       </>
     );
   }
@@ -83,23 +90,29 @@ const Tictac = () => {
     let row = [];
     for (let j = 0; j < 3; j++) {
       row.push(
-        <th key={cellID}>
+        <td key={cellID}>
           <Cell
             ID={cellID}
             counterC={counter}
             onCalculateCounter={CalculateCounter}
             onMark={evaluate}
           />
-        </th>
+        </td>
       );
       cellID += 1;
     }
-    grid.push(<tr>{row}</tr>);
+    grid.push(<tr key={`row` + cellID}>{row}</tr>);
   }
   return (
     <>
-      <Player player={(counter % 2) + 1} />
-      <table className="cell">{grid}</table>
+      <div className="player">
+        <Player player={(counter % 2) + 1} />
+      </div>
+      <div style={{ margin: "200px 600px 100px 600px" }}>
+        <table className="cell">
+          <tbody>{grid}</tbody>
+        </table>
+      </div>
     </>
   );
 };
